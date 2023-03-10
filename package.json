@@ -4,7 +4,8 @@
   "description": "Downloading images off from a given url using a CasperJS-powered script onto the local filesystem.",
   "main": "getImages.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "npm i -g casperjs phantomjs"
   },
   "repository": {
     "type": "git",
