@@ -35,6 +35,7 @@ function getAllTheImagesTag() {
     var isJpeg = new RegExp('jpeg$', 'i');
     var isGif = new RegExp('gif$', 'i');
     var isSvg = new RegExp('svg$', 'i');
+    var isWebp = new RegExp('webp$', 'i');
 
     if (el.hasAttribute('src') || el.hasAttribute('data-src') || el.hasAttribute('file')) {
       var imgUrl = el.getAttribute('src') == null ? el.getAttribute('data-src').split('?')[0] : el.getAttribute('src').split('?')[0];
@@ -42,7 +43,8 @@ function getAllTheImagesTag() {
       imgUrl = imgUrl == null ? el.getAttribute('file').split('?')[0] : imgUrl;
       imgUrl = imgUrl.indexOf('//') == 0 ? 'http:' + imgUrl : imgUrl;
       imgUrl = imgUrl.trim();
-      if (isPng.test(imgUrl) || isJpg.test(imgUrl) || isJpeg.test(imgUrl) || isGif.test(imgUrl) || isSvg.test(imgUrl)) {
+      var imgType = el.getAttribute('alt') == null ? imgUrl : el.getAttribute('alt');
+      if (isPng.test(imgType) || isJpg.test(imgType) || isJpeg.test(imgType) || isGif.test(imgType) || isSvg.test(imgType) || isWebp.test(imgType)) {
         if (uniqueLinks.indexOf(imgUrl) == -1) {
           uniqueLinks.push(imgUrl);
           results.push({url: imgUrl});
@@ -87,10 +89,10 @@ casper.then(function(res) {
   this.echo("Begin to download all the images...");
   this.echo("There are in total of " + numberOfImages + " image(s).");
   images.forEach(function(currentValue, index, arr) {
-    var folderPath = './' + (casper.cli.get(1) || sourcePage.split('//')[1].split('/')[0]) + '/';
+    var folderPath = './' + (casper.cli.get(1) || (sourcePage.split('//')[1].split('/')[1] || sourcePage.split('//')[1].split('/')[0])) + '/';
     var imgUrl = currentValue.url;
     var splittedImageUrl = imgUrl.split('/');
-    var imgName = splittedImageUrl[splittedImageUrl.length-1];
+    var imgName = /*splittedImageUrl[splittedImageUrl.length-1];*/ `${(index + 1)}.webp`;
     var pathToImage = folderPath + imgName;
 
     downloadTheImage(casper, imgUrl, folderPath, imgName);
